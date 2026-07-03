@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Udaan Cyber Defense</title>
+    <style>
+        :root {
+            --primary: #0a192f;
+            --secondary: #172a45;
+            --accent: #64ffda;
+            --text: #e6f1ff;
+            --text-muted: #8892b0;
+            --alert: #ff4d4d;
+            --success: #2ecc71;
+            --warning: #f1c40f;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--primary); color: var(--text); line-height: 1.6; padding-bottom: 60px; }
+        
+        .helpline-top { background-color: var(--alert); color: #fff; text-align: center; padding: 10px; font-weight: bold; font-size: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        header { background: linear-gradient(135deg, var(--primary), var(--secondary)); padding: 50px 20px 40px 20px; text-align: center; border-bottom: 2px solid var(--accent); position: relative; }
+        
+        .shield-logo {
+            width: 110px; height: 125px;
+            background: linear-gradient(135deg, #1e3a8a, #0f172a);
+            border: 3px solid var(--accent);
+            border-radius: 50% 50% 50% 50% / 15% 15% 85% 85%;
+            margin: 0 auto 15px auto;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            box-shadow: 0 0 25px rgba(100, 255, 218, 0.4), inset 0 0 15px rgba(0,0,0,0.8);
+        }
+        .shield-logo::before { content: "🦅"; font-size: 48px; filter: drop-shadow(0px 3px 5px #000); }
+        .shield-logo span { font-size: 13px; color: var(--accent); font-weight: 900; letter-spacing: 1px; margin-top: -5px; }
+
+        header h1 { font-size: 28px; margin-bottom: 5px; font-weight: 700; color: #fff; }
+        header p { color: var(--accent); font-size: 14px; font-weight: 500; }
+        
+        .container { max-width: 850px; margin: 30px auto; padding: 0 20px; }
+        .section-title { color: var(--accent); border-left: 4px solid var(--accent); padding-left: 12px; margin: 40px 0 20px 0; font-size: 22px; font-weight: 600; }
+        .card { background-color: var(--secondary); border: 1px solid rgba(100, 255, 218, 0.1); border-radius: 12px; padding: 22px; margin-bottom: 22px; box-shadow: 0 6px 16px rgba(0,0,0,0.2); }
+        
+        .alert-box { border-left: 5px solid var(--alert); }
+        .success-box { border-left: 5px solid var(--success); }
+        .warning-box { border-left: 5px solid var(--warning); }
+        
+        ul { list-style: none; }
+        li { margin-bottom: 14px; position: relative; padding-left: 22px; font-size: 15px; }
+        li::before { content: "▹"; position: absolute; left: 0; color: var(--accent); font-weight: bold; }
+        .highlight { color: var(--accent); font-weight: bold; }
+        .badge { color: white; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: bold; display: inline-block; margin-bottom: 12px; }
+
+        .lang-toggle { position: fixed; top: 15px; right: 15px; z-index: 10000; background: rgba(10, 25, 47, 0.95); border: 2px solid var(--accent); padding: 3px; border-radius: 30px; display: flex; gap: 3px; box-shadow: 0 4px 15px rgba(100, 255, 218, 0.3); }
+        .lang-btn { background: transparent; border: none; color: var(--text); padding: 5px 12px; font-size: 11px; font-weight: bold; border-radius: 20px; cursor: pointer; transition: all 0.2s; }
+        .lang-btn.active { background-color: var(--accent); color: var(--primary); }
+        
+        .category-selector { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 20px; }
+        @media(min-width: 600px) { .category-selector { grid-template-columns: 1fr 1fr 1fr; } }
+        .cat-btn { background-color: var(--secondary); color: var(--text); border: 1px solid rgba(100, 255, 218, 0.3); padding: 12px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: all 0.2s; text-align: center; font-size: 13px; }
+        .cat-btn.active { background-color: var(--accent); color: var(--primary); border-color: var(--accent); }
+
+        .quiz-container { background-color: var(--secondary); padding: 25px; border-radius: 12px; border: 1px solid rgba(100, 255, 218, 0.2); margin-bottom: 30px; }
+        .quiz-status { display: flex; justify-content: space-between; color: var(--accent); font-size: 14px; margin-bottom: 15px; font-weight: bold; }
+        .question { font-weight: 600; margin-bottom: 20px; color: var(--text); font-size: 16px; }
+        .options { display: flex; flex-direction: column; gap: 12px; }
+        .option-btn { background-color: var(--primary); color: var(--text); border: 1px solid rgba(100, 255, 218, 0.15); padding: 14px; text-align: left; border-radius: 8px; cursor: pointer; font-size: 14px; transition: all 0.2s; }
+        .option-btn:hover:not(:disabled) { border-color: var(--accent); background-color: rgba(100, 255, 218, 0.05); }
+        .quiz-nav { display: flex; justify-content: space-between; margin-top: 25px; border-top: 1px solid rgba(100, 255, 218, 0.1); padding-top: 20px; }
+        .nav-btn { background-color: var(--accent); color: var(--primary); border: none; padding: 10px 22px; font-weight: bold; border-radius: 6px; cursor: pointer; }
+        .nav-btn:disabled { background-color: #2a3b4e; color: #52667d; cursor: not-allowed; }
+        .feedback { margin-top: 20px; padding: 16px; border-radius: 8px; font-size: 14px; display: none; line-height: 1.6; }
+        .score-board { text-align: center; padding: 30px 10px; display: none; }
+        
+        .action-link { display: inline-block; background-color: var(--accent); color: var(--primary); padding: 11px 20px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 12px; }
+        footer { text-align: center; padding: 30px 20px; font-size: 13px; color: var(--text-muted); border-top: 1px solid rgba(100, 255, 218, 0.1); margin-top: 50px; }
+    </style>
+</head>
+<body>
+
+    <div class="lang-toggle">
+        <button id="btn-bn" class="lang-btn" onclick="switchLanguage('bn')">বাংলা</button>
+        <button id="btn-en" class="lang-btn active" onclick="switchLanguage('en')">English</button>
+        <button id="btn-hi" class="lang-btn" onclick="switchLanguage('hi')">हिन्दी</button>
+    </div>
+
+    <div class="helpline-top" id="top-bar">
+        🚨 National Cyber Financial Fraud Helpline Number: 1930
+    </div>
+
+    <header>
+        <div class="shield-logo"><span>UDC</span></div>
+        <h1>Udaan Cyber Defense</h1>
+        <p id="m-sub">Secure Digital India • Shield of a Good Citizen</p>
+    </header>
+
+    <div class="container">
+
+        <h2 class="section-title" id="t-sec1">🎯 Typology of Cyber Crimes & Fraud Frameworks</h2>
+        <div class="card alert-box">
+            <span class="badge" style="background-color: var(--alert);" id="b-scam">🚨 Primary Cyber Attack Modalities</span>
+            <ul id="c-scams">
+                <li><strong>Financial Fraud:</strong> Social engineering phone lures requesting OTP codes via panic updates.</li>
+                <li><strong>Data Theft/Phishing:</strong> Bait pages promising reward pools targeting user passwords.</li>
+                <li><strong>Cyber Blackmail:</strong> Hijacked channels or modified recording feeds used to extract payments.</li>
+                <li><strong>Malicious Payloads:</strong> Keystroke monitors embedded silently within active operating system layers.</li>
+            </ul>
+        </div>
+
+        <h2 class="section-title" id="t-sec2">🌐 Website Integrity & Spoofed Call Verification</h2>
+        <div class="card warning-box">
+            <ul id="c-verify">
+                <li><strong>🔒 HTTP vs HTTPS Analysis:</strong> Trusted servers mandate an active HTTPS header paired with a lock token (🔒). Inputting personal parameters inside clear-text HTTP fields is fundamentally compromised.</li>
+                <li><strong>📱 Third-Party Package Prohibitions:</strong> Native android software packaged outside primary stores constitutes a structural risk vector. Installing interactive mirroring tools like AnyDesk transfers core input scopes entirely to host terminals.</li>
+            </ul>
+        </div>
+
+        <h2 class="section-title" id="t-sec3">⚖️ Standard Operating Protocols for Cyber FIR Registrations</h2>
+        <div class="card success-box">
+            <ul id="c-fir">
+                <li><strong>Identity Integrity Guaranteed:</strong> Enforcing statutory protection templates is a standard legal claim. Internal operating instructions enforce absolute masking of identifying metadata records.</li>
+                <li><strong>Evidentiary Requirements:</strong> Certified banking printouts, complete snapshot arrays of scam dialogues, system txn keys, and suspect telephone hashes.</li>
+                <li><strong>The Golden Hour Framework:</strong> Routing data to the <span class="highlight">1930</span> desk inside an initial 2-hour window lets banks freeze inter-operator nodes. Reporting inside 3 days to your financial carrier triggers absolute statutory shield protections.</li>
+            </ul>
+        </div>
+
+        <h2 class="section-title" id="t-sec4">🚨 Rapid Response Portals</h2>
+        <div class="card alert-box">
+            <p id="c-action">Access official federal database assets directly to submit secure informational reports against ongoing cyber exploitation attacks.</p>
+            <a href="https://www.cybercrime.gov.in" target="_blank" class="action-link" id="btn-link">Report on National Cyber Crime Portal ↗</a>
+        </div>
+
+        <h2 class="section-title" id="t-sec5">📱 Cyber Security Live Audit (3 Special Sections)</h2>
+        
+        <div class="category-selector">
+            <button id="cat-device" class="cat-btn active" onclick="changeCategory('device')">📱 Device & Online (20 Queries)</button>
+            <button id="cat-women" class="cat-btn" onclick="changeCategory('women')">🚺 Women Safety (10 Queries)</button>
+            <button id="cat-child" class="cat-btn" onclick="changeCategory('child')">👶 Child Protection (10 Queries)</button>
+        </div>
+
+        <div class="quiz-container">
+            <div class="quiz-status">
+                <span id="quiz-progress">Question: 1 / 20</span>
+                <span id="quiz-score-live">Score: 0</span>
+            </div>
+            <div id="quiz-box">
+                <div class="question" id="question-text">Loading...</div>
+                <div class="options" id="options-container"></div>
+                <div class="feedback" id="feedback-text"></div>
+                <div class="quiz-nav">
+                    <button class="nav-btn" id="prev-btn" onclick="prevQuestion()">Previous</button>
+                    <button class="nav-btn" id="next-btn" onclick="nextQuestion()">Next Question</button>
+                </div>
+            </div>
+            <div class="score-board" id="score-board">
+                <h3 id="t-qdone">🎉 Structural Audit Completed!</h3>
+                <p id="t-score-text">Your Audit Matrix Score: <span id="final-score" class="highlight">0</span></p>
+                <br>
+                <button class="nav-btn" onclick="restartQuiz()" id="t-retry">Restart Evaluation Cycle</button>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p id="t-foot">&copy; 2026 Udaan Cyber Defense. Permanently Deployed in Protective Operations.</p>
+    </footer>
+
+    <script>
+        // কুইজ ডেটা অবজেক্ট
+        const quizDatabase = {
+            device: [],
+            women: [],
+            child: []
+        };
+
+        // ক্যাটাগরি ১: ডিভাইস নিরাপত্তা (২০টি প্রশ্ন)
+        const d_bn_qs = [
+            "১. আপনার স্মার্টফোনের অপারেটিং সিস্টেম (OS) কতদিন পর পর আপডেট করেন?",
+            "২. আপনি কি বিভিন্ন অনলাইন অ্যাকাউন্টে একই পাসওয়ার্ড ব্যবহার করেন?",
+            "৩. নতুন অ্যাপ ডাউনলোড করার সময় পারমিশন চাইলে আপনি সাধারণত কী করেন?",
+            "৪. আপনি কি আপনার গুগল অ্যাকাউন্টে Two-Factor Authentication (2FA) অন রেখেছেন?",
+            "৫. ক্রোম ব্রাউজারে পাসওয়ার্ড ফাঁসের ওয়ার্নিং দেখালে কী করা উচিত?",
+            "৬. অচেনা ওয়েবসাইট থেকে ক্র্যাক সফ্টওয়্যার বা মোড গেম নামালে কী ক্ষতি হতে পারে?",
+            "৭. আপনার ডিভাইস সুরক্ষিত রাখতে পাসওয়ার্ডের দৈর্ঘ্য সর্বনিম্ন কত অক্ষরের হওয়া উচিত?",
+            "৮. কোনো অচেনা নম্বর থেকে হোয়াটসঅ্যাপ লিংকের মাধ্যমে .APK ফাইল এলে আপনি কী করবেন?",
+            "৯. ব্রাউজারে হঠাত্ 'Your device is infected with 13 viruses!' এলে কী করবেন?",
+            "১০. ল্যাপটপে অন্য কারও পেনড্রাইভ লাগানোর আগে কোন জিনিসটি করা বাধ্যতামূলক?",
+            "১১. আপনার ফোন হারিয়ে গেলে দূর থেকে ডেটা মুছে ফেলার জন্য কোন ফিচারটি অন থাকা দরকার?",
+            "১২. ব্যাংকিং বা ইউপিআই অ্যাপ ব্যবহার করার পর কোন কাজটি করা অত্যন্ত জরুরি?",
+            "১৩. আপনি কি আপনার ওয়াই-ফাই রাউটারের ডিফল্ট অ্যাডমিন পাসওয়ার্ড পরিবর্তন করেছেন?",
+            "১৪. গুগল প্লে স্টোরে কোনো নতুন অ্যাপ নামানোর আগে কোন জিনিসটি চেক করা নিরাপদ?",
+            "১৫. গুরুত্বপূর্ণ ডেটা বা প্রয়োজনীয় নথির ব্যাকআপ রাখার সবচেয়ে নিরাপদ বৈজ্ঞানিক অভ্যাস কোনটি?",
+            "১৬. অচেনা পাবলিক ইউএসবি (USB) চার্জিং স্টেশন থেকে কেব্‌ল গুঁজে ফোন চার্জ দিলে কী ঝুঁকি থাকে?",
+            "১৭. ফেসবুক বা ইনস্টাগ্রাম প্রোফাইলে আপনার আসল জন্মতারিখ কার জন্য দৃশ্যমান রাখা উচিত?",
+            "১৮. আপনার ল্যাপটপে উইন্ডোজ ডিফেন্ডারের ভাইরাস ডাটাবেস শেষ কবে আপডেট হয়েছে?",
+            "১৯. কোনো মেইলের সাথে যদি .exe বা .bat ফাইল এটাচমেন্ট থাকে, তবে আপনার কী করা উচিত?",
+            "২০. আপনার কিবোর্ডে টাইপ করা পাসওয়ার্ড হ্যাকারের সার্ভারে পাচার করে কোন ম্যালওয়্যার?"
+        ];
+        const d_en_qs = [
+            "1. How often do you update the Operating System (OS) of your smartphone?",
+            "2. Do you reuse the same password across multiple online accounts?",
+            "3. What do you do when a newly installed app requests system permissions?",
+            "4. Is Two-Factor Authentication (2FA) enabled on your Google accounts?",
+            "5. What should you do if Chrome displays a 'Password leaked in a data breach' warning?",
+            "6. What are the risks of downloading cracked software or modded games from untrusted sites?",
+            "7. What should be the minimum length of a strong password to ensure security?",
+            "8. What should you do if an unknown number sends an .APK file via a WhatsApp link?",
+            "9. How should you react if a webpage says 'Your device is infected with 13 viruses!'?",
+            "10. What is mandatory before opening files from someone else's USB flash drive?",
+            "11. Which system feature enables remote data wiping if a device gets stolen?",
+            "12. What action is crucial immediately after completing tasks inside a banking or UPI app?",
+            "13. Have you replaced the factory default administrative password of your home Wi-Fi router?",
+            "14. What indicators should you inspect before downloading an app from the Play Store?",
+            "15. What represents the safest systematic routine for data archival tasks?",
+            "16. What vector threat exists when plugging directly into public USB charging ports?",
+            "17. Who should be allowed to view your full birth date on social profiles?",
+            "18. When should the malware signature index of Windows Defender update?",
+            "19. How should you handle email attachments ending with extensions like .exe or .bat?",
+            "20. Which specialized exploit logs raw keystrokes to steal hidden credentials?"
+        ];
+        const d_hi_qs = [
+            "1. आप अपने स्मार्टफोन का ऑपरेटिंग सिस्टम (OS) कितने दिनों में अपडेट करते हैं?",
+            "2. क्या आप विभिन्न ऑनलाइन अकाउंट्स के लिए एक ही पासवर्ड का उपयोग करते हैं?",
+            "3. नया ऐप डाउनलोड करते समय परमिशन मांगने पर आप क्या करते हैं?",
+            "4. क्या आपने अपने गूगल अकाउंट पर टू-फैक्टर ऑथेंटिकेशन (2FA) ऑन रखा है?",
+            "5. क्रोम ब्राउज़र में पासवर्ड लीक की चेतावनी दिखने पर क्या करना चाहिए?",
+            "6. अज्ञात वेबसाइट से क्रैक सॉफ्टवेयर या मॉड गेम डाउनलोड करने से क्या नुकसान हो सकता है?",
+            "7. अपने डिवाइस को सुरक्षित रखने के लिए पासवर्ड की लंबाई कम से कम कितनी होनी चाहिए?",
+            "8. किसी अज्ञात नंबर से व्हाट्सएप लिंक के जरिए .APK फाइल आने पर आप क्या करेंगे?",
+            "9. ब्राउज़र में अचानक 'Your device is infected with 13 viruses!' आने पर क्या करेंगे?",
+            "10. लैपटॉप में किसी और का पेनड्राइव लगाने से पहले क्या करना अनिवार्य है?",
+            "11. फोन खो जाने पर दूर से सारा डेटा डिलीट करने के लिए फोन में कौन सा फीचर ऑन होना चाहिए?",
+            "12. बैंकिंग या यूपीआई ऐप का इस्तेमाल करने के बाद कौन सा काम सबसे जरूरी है?",
+            "13. क्या आपने अपने वाई-फाई राउटर का डिफॉल्ट एडमिन पासवर्ड बदल दिया है?",
+            "14. गूगल प्ले स्टोर से कोई नया ऐप डाउनलोड करने से पहले क्या जांचना सुरक्षित है?",
+            "15. महत्वपूर्ण डेटा या दस्तावेज़ों का बैकअप रखने की सबसे सुरक्षित आदत कौन सी है?",
+            "16. किसी अज्ञात पब्लिक यूएसबी (USB) चार्जिंग स्टेशन से सीधे केबल लगाकर फोन चार्ज करने पर क्या जोखिम है?",
+            "17. फेसबुक या इंस्टाग्राम प्रोफाइल पर आपकी असली जन्मतिथि किसके लिए दृश्यमान होनी चाहिए?",
+            "18. आपके लैपटॉप में विंडोज डिफेंडर का वायरस डेटाबेस आखिरी बार कब अपडेट हुआ था?",
+            "19. यदि किसी ईमेल के साथ .exe या .bat फाइल अटैचमेंट हो, तो आपको क्या करना चाहिए?",
+            "20. आपके कीबोर्ड पर टाइप होने वाले हर सीक्रेट पासवर्ड को हैकर के पास भेजने वाला मैलवेयर कौन सा है?"
+        ];
+
+        // ডিফল্ট জেনারেটর ফর ডিভাইস
+        for(let i=0; i<20; i++) {
+            quizDatabase.device.push({
+                en_q: d_en_qs[i], bn_q: d_bn_qs[i], hi_q: d_hi_qs[i],
+                options_en: ["Option A (Highly Secure Action)", "Option B (Delayed Action Risk)", "Option C (Completely Vulnerable)"],
+                options_bn: ["অপশন ক (সর্বোচ্চ নিরাপদ পদক্ষেপ)", "অপশন খ (দেরি করার ঝুঁকি)", "অপশন গ (সম্পূর্ণ অরক্ষিত অভ্যাস)"],
+                options_hi: ["विकल्प ए (अत्यधिक सुरक्षित कदम)", "विकल्प बी (देरी करने का जोखिम)", "विकल्प सी (पूरी तरह से असुरक्षित)"],
+                correct: 0,
+                en_explain: "Correct Explanation: Adhering to proactive cyber hygiene protects device parameters from baseline automated exploits.",
+                bn_explain: "সঠিক ব্যাখ্যা: সচেতন সাইবার হাইজিন মেনে চললে ডিভাইস ব্যাকগ্রাউন্ডের ম্যালওয়্যার ও রিমোট কোড এক্সিকিউশন রোধ করা যায়।",
+                hi_explain: "सही व्याख्या: सक्रिय साइबर स्वच्छता का पालन करने से डिवाइस को स्वचालित शोषण और रिमोट एक्सेस से बचाया जा सकता है।"
+            });
+        }
+
+        // ক্যাটাগরি ২: নারী নিরাপত্তা (১০টি প্রশ্ন)
+        const w_bn_qs = [
+            "১. সোশ্যাল মিডিয়ায় কেউ আপনার ছবি বিকৃত (Morphing) করে ব্ল্যাকমেইল করলে প্রথম পদক্ষেপ কী?",
+            "২. অচেনা প্রোফাইল থেকে ম্যাসেঞ্জারে হেনস্থামূলক বার্তা বা হুমকি এলে কী করা উচিত?",
+            "৩. আপনার নামে কেউ সোশ্যাল মিডিয়ায় ফেক প্রোফাইল খুলে আপত্তিকর পোস্ট ছড়ালে করণীয় কী?",
+            "৪. ভিডিও কলে গোপনে আপনার স্ক্রিন রেকর্ড করে টাকা দাবি করলে কোন কাজটি নিষিদ্ধ?",
+            "৫. কোনো ব্ল্যাকমেইলার চ্যাট হিস্ট্রি ডিলিট করার ভয় দেখালে আপনার কি করা উচিত?",
+            "৬. পর্নোগ্রাফিক সাইটে সম্মতি ছাড়া আপনার ছবি আপলোড করা হলে কোন সরকারি বিভাগে জানাবেন?",
+            "৭. কর্মক্ষেত্রে বা বাইরে কোনো পরিচিত ব্যক্তি ডিজিটাল মাধ্যমে উত্যক্ত করলে কোন আইনে ব্যবস্থা নেওয়া যায়?",
+            "৮. আপনার ইমেল বা সোশ্যাল মিডিয়া অ্যাকাউন্ট হ্যাক করে ব্যক্তিগত ছবি চুরি হলে গোল্ডেন আওয়ার কী?",
+            "৯. সাইবার কমপ্লেন করার সময় নাম ও পরিচয় সম্পূর্ণ গোপন রাখার জন্য পোর্টালে কোন অপশনটি বেছে নেবেন?",
+            "১০. কোনো অ্যাপ বা ওয়েবসাইটে ছবি আপলোড করার আগে কোন পলিসিটি দেখে নেওয়া জরুরি?"
+        ];
+        const w_en_qs = [
+            "1. If someone morphs your photo and blackmails you on social media, what should be your first step?",
+            "2. What should you do if you receive harassing messages or threats from an unknown profile?",
+            "3. What action should you take if someone creates a fake profile in your name and spreads offensive posts?",
+            "4. If someone secretly records your video call screen and demands money, what is strictly prohibited?",
+            "5. What should you do if a blackmailer threatens to delete the chat history before you can report?",
+            "6. Which official portal should you contact if your photos are uploaded without consent to any site?",
+            "7. Under which framework can legal action be initiated if a known person cyberstalks you?",
+            "8. What is the golden hour window if your social media account is hacked and private media stolen?",
+            "9. Which specific track option should you select on the cyber portal to file a report completely anonymously?",
+            "10. Which policy is vital to check before uploading personal images onto any mobile application?"
+        ];
+        const w_hi_qs = [
+            "1. यदि कोई सोशल मीडिया पर आपकी फोटो मॉर्फ करके ब्लैकमेल करता है, तो पहला कदम क्या होना चाहिए?",
+            "2. किसी अज्ञात प्रोफाइल से मैसेंजर पर परेशान करने वाले संदेश या धमकियां मिलने पर क्या करना चाहिए?",
+            "3. यदि कोई आपके नाम से फर्जी प्रोफाइल बनाकर आपत्तिजनक पोस्ट फैलाता है, तो क्या कार्रवाई करनी चाहिए?",
+            "4. यदि कोई वीडियो कॉल स्क्रीन रिकॉर्ड करके पैसे मांगता है, तो कौन सा काम पूरी तरह से प्रतिबंधित है?",
+            "5. यदि कोई ब्लैकमेलर शिकायत करने से पहले चैट हिस्ट्री डिलीट करने की धमकी दे, तो आपको क्या करना चाहिए?",
+            "6. सहमति के बिना आपकी तस्वीरें किसी साइट पर अपलोड होने पर किस सरकारी पोर्टल पर शिकायत करनी चाहिए?",
+            "7. यदि कोई परिचित व्यक्ति आपको डिजिटल माध्यम से परेशान करता है, तो किस कानून के तहत कार्रवाई की जा सकती है?",
+            "8. सोशल मीडिया अकाउंट हैक होने और निजी तस्वीरें चोरी होने पर गोल्डन ऑवर विंडो क्या है?",
+            "9. पूरी तरह से गुमनाम रूप से रिपोर्ट दर्ज करने के लिए साइबर पोर्टल पर कौन सा विकल्प चुनना चाहिए?",
+            "10. किसी भी मोबाइल एप्लिकेशन पर व्यक्तिगत चित्र अपलोड करने से पहले कौन सी नीति जांचना महत्वपूर्ण है?"
+        ];
+
+        for(let i=0; i<10; i++) {
+            quizDatabase.women.push({
+                en_q: w_en_qs[i], bn_q: w_bn_qs[i], hi_q: w_hi_qs[i],
+                options_en: ["Preserve digital evidence & report immediately", "Keep quiet out of social panic", "Engage with the attacker"],
+                options_bn: ["ডিজিটাল তথ্য সংগ্রহ করে অবিলম্বে রিপোর্ট করা", "সামাজিক ভয়ে চুপচাপ থাকা", "প্রতারকের সাথে সমঝোতা করা"],
+                options_hi: ["डिजिटल साक्ष्य सुरक्षित करें और तुरंत रिपोर्ट करें", "सामाजिक डर से चुप रहें", "जालसाज के साथ बातचीत करें"],
+                correct: 0,
+                en_explain: "Correct Explanation: Preserving baseline trace logs (screenshots/URLs) enables federal agencies to track suspect nodes efficiently under encryption.",
+                bn_explain: "সঠিক ব্যাখ্যা: ডিজিটাল প্রমাণ (স্ক্রিনশট ও লিংক) সংগ্রহ করে রাখলে পুলিশ ও সাইবার ক্রাইম উইং অপরাধীকে দ্রুত আইনি আওতায় আনতে পারে।",
+                hi_explain: "सही व्याख्या: डिजिटल साक्ष्य (स्क्रीनशॉट और लिंक) सुरक्षित रखने से पुलिस और साइबर विंग अपराधी को तुरंत ट्रैक कर सकते हैं।"
+            });
+        }
+
+        // ক্যাটাগরি ৩: শিশু সুরক্ষা (১০টি প্রশ্ন)
+        const c_bn_qs = [
+            "১. শিশুদের অনলাইন গেমের মাধ্যমে ব্যাংকিং প্রতারণা থেকে রক্ষা করার সেরা উপায় কোনটি?",
+            "২. অনলাইন ক্লাসের অজুহাতে শিশুরা ইন্টারনেটে কী দেখছে তা ট্র্যাক করার অফিশিয়াল টুল কোনটি?",
+            "৩. কোনো অনলাইন গেমের চ্যাট বক্সে অপরিচিত কেউ বাচ্চার বাড়ির ঠিকানা ও নম্বর চাইলে বাচ্চার করণীয় কী?",
+            "৪. ইউটিউবে শিশুদের জন্য ক্ষতিকারক কনটেন্ট ব্লক করার জন্য কোন মোডটি অন করা উচিত?",
+            "৫. আপনার সন্তান হঠাত্ মোবাইল স্ক্রিন লুকিয়ে রাখলে বা গম্ভীর হয়ে গেলে কোন ঝুঁকির লক্ষণ হতে পারে?",
+            "৬. সোশ্যাল মিডিয়ায় শিশুদের প্রোফাইল পিকচার এবং তথ্য কোন সেটিংসে রাখা বাধ্যতামূলক?",
+            "৭. অনলাইন গ্রুমিং (Cyber Grooming) থেকে সন্তানদের দূরে রাখতে মা-বাবার প্রথম ভূমিকা কী?",
+            "৮. কোনো গেমিং অ্যাপ যদি বাচ্চার মা-বাবার ক্রেডিট কার্ডের তথ্য সেভ করতে চায়, তবে কী করবেন?",
+            "৯. সাইবার বুলিং বা অনলাইন হেনস্থার শিকার কোনো শিশুকে মানসিকভাবে সুস্থ করার সঠিক পদ্ধতি কী?",
+            "১০. চাইল্ড পর্নোগ্রাফি বা শিশু নির্যাতনমূলক কোনো কনটেন্ট ইন্টারনেটে দেখলে কোথায় রিপোর্ট করবেন?"
+        ];
+        const c_en_qs = [
+            "1. What is the best way to protect children from financial frauds hidden inside online games?",
+            "2. Which official tracking engine helps monitor minor system interaction during online sessions?",
+            "3. What should a child do if a stranger in a gaming chat requests their home location parameters?",
+            "4. Which safety parameter filters destructive media assets on video streaming sites for children?",
+            "5. If a minor suddenly hides device screens or exhibits extreme isolation, what threat vector does it indicate?",
+            "6. What privacy scope is mandatory for minor identity logs on social networking services?",
+            "7. What is the primary role of parents in protecting children from online cyber grooming protocols?",
+            "8. What strategy should be applied if an application prompts to store default card details?",
+            "9. What is the proper framework to rehabilitate a minor targeted by online cyberbullying infrastructure?",
+            "10. Where should you immediately report instances of child sexual abuse material (CSAM) found on the web?"
+        ];
+        const c_hi_qs = [
+            "1. बच्चों को ऑनलाइन गेम के माध्यम से होने वाली बैंकिंग धोखाधड़ी से बचाने का सबसे अच्छा तरीका कौन सा है?",
+            "2. ऑनलाइन सत्रों के दौरान बच्चों की डिवाइस गतिविधियों पर नज़र रखने का आधिकारिक टूल कौन सा है?",
+            "3. यदि गेमिंग चैट में कोई अजनबी बच्चे के घर का पता या नंबर मांगता है, तो बच्चे को क्या करना चाहिए?",
+            "4. यूट्यूब पर बच्चों के लिए हानिकारक कंटेंट को ब्लॉक करने के लिए कौन सा मोड ऑन करना चाहिए?",
+            "5. यदि आपका बच्चा अचानक मोबाइल स्क्रीन छुपाता है या गंभीर हो जाता है, तो यह किस खतरे का संकेत हो सकता है?",
+            "6. सोशल मीडिया पर बच्चों की प्रोफाइल पिक्चर और जानकारी किस सेटिंग में रखना अनिवार्य है?",
+            "7. बच्चों को ऑनलाइन साइबर ग्रूमिंग से दूर रखने में माता-पिता की प्राथमिक भूमिका क्या है?",
+            "8. यदि कोई गेमिंग ऐप माता-पिता के क्रेडिट कार्ड की जानकारी सहेजने (Save) के लिए कहे, तो क्या करें?",
+            "9. ऑनलाइन साइबर बुलिंग के शिकार बच्चे को मानसिक रूप से स्वस्थ करने का सही तरीका क्या है?",
+            "10. इंटरनेट पर चाइल्ड पोर्नोग्राफी या बाल शोषण से संबंधित कंटेंट दिखने पर कहाँ रिपोर्ट करनी चाहिए?"
+        ];
+
+        for(let i=0; i<10; i++) {
+            quizDatabase.child.push({
+                en_q: c_en_qs[i], bn_q: c_bn_qs[i], hi_q: c_hi_qs[i],
+                options_en: ["Activate systematic parental controls & educate the minor", "Allow unrestricted device access", "Ignore the baseline behavioral shifts"],
+                options_bn: ["প্যারেন্টাল কন্ট্রোল সক্রিয় করা এবং সন্তানকে বন্ধুত্বপূর্ণ শিক্ষা দেওয়া", "ডিভাইসে অবাধ স্বাধীনতা দেওয়া", "আচরণগত পরিবর্তন এড়িয়ে যাওয়া"],
+                options_hi: ["पेरेंटल कंट्रोल सक्रिय करें और बच्चे को दोस्ताना शिक्षा दें", "डिवाइस पर पूर्ण स्वतंत्रता दें", "व्यवहार में बदलाव को नजरअंदाज करें"],
+                correct: 0,
+                en_explain: "Correct Explanation: Restricting systemic parameters via utility layers like Google Family Link prevents exposure to predatory routing modules.",
+                bn_explain: "সঠিক ব্যাখ্যা: গুগল ফ্যামিলি লিংক বা প্যারেন্টাল লক ব্যবহার করলে শিশুরা সাইবার অপরাধীদের ফাঁদে পা দেওয়া বা টাকা নষ্ট করা থেকে সুরক্ষিত থাকে।",
+                hi_explain: "सही व्याख्या: गूगल फैमिली लिंक या पैरेंटल लॉक का उपयोग करने से बच्चे साइबर अपराधियों के जाल में फंसने या पैसे गंवाने से सुरक्षित रहते हैं।"
+            });
+        }
+
+        const translations = {
+            en: {
+                top: "🚨 National Cyber Financial Fraud Helpline Number: 1930",
+                sub: "Secure Digital India • Shield of a Good Citizen",
+                sec1: "🎯 Typology of Cyber Crimes & Fraud Frameworks",
+                b_scam: "🚨 Primary Cyber Attack Modalities",
+                c_scams: `<li><strong>Financial Fraud:</strong> Social engineering phone lures requesting OTP codes via panic updates.</li>
+                          <li><strong>Data Theft/Phishing:</strong> Bait pages promising reward pools targeting user passwords.</li>
+                          <li><strong>Cyber Blackmail:</strong> Hijacked channels or modified recording feeds used to extract payments.</li>
+                          <li><strong>Malicious Payloads:</strong> Keystroke monitors embedded silently within active operating system layers.</li>`,
+                sec2: "🌐 Website Integrity & Spoofed Call Verification",
+                c_verify: `<li><strong>🔒 HTTP vs HTTPS Analysis:</strong> Trusted servers mandate an active HTTPS header paired with a lock token (🔒). Inputting personal parameters inside clear-text HTTP fields is fundamentally compromised.</li>
+                           <li><strong>📱 Third-Party Package Prohibitions:</strong> Native android software packaged outside primary stores constitutes a structural risk vector. Installing interactive mirroring tools like AnyDesk transfers core input scopes entirely to host terminals.</li>`,
+                sec3: "⚖️ Standard Operating Protocols for Cyber FIR Registrations",
+                c_fir: `<li><strong>Identity Integrity Guaranteed:</strong> Enforcing statutory protection templates is a standard legal claim. Internal operating instructions enforce absolute masking of identifying metadata records.</li>
+                        <li><strong>Evidentiary Requirements:</strong> Certified banking printouts, complete snapshot arrays of scam dialogues, system txn keys, and suspect telephone hashes.</li>
+                        <li><strong>The Golden Hour Framework:</strong> Routing data to the <span class="highlight">1930</span> desk inside an initial 2-hour window lets banks freeze inter-operator nodes. Reporting inside 3 days to your financial carrier triggers absolute statutory shield protections.</li>`,
+                sec4: "🚨 Rapid Response Portals",
+                c_action: "Access official federal database assets directly to submit secure informational reports against ongoing cyber exploitation attacks.",
+                btn_link: "Report on National Cyber Crime Portal ↗",
+                sec5: "📱 Cyber Security Live Audit (3 Special Sections)",
+                cat_dev: "📱 Device & Online",
+                cat_wom: "🚺 Women Safety",
+                cat_chi: "👶 Child Protection",
+                qdone: "🎉 Structural Audit Completed!",
+                score_text: "Your Audit Matrix Score: ",
+                retry: "Restart Evaluation Cycle",
+                q_label: "Question: ",
+                s_label: "Score: ",
+                prev: "Previous",
+                next: "Next Question",
+                result: "Result",
+                foot: "© 2026 Udaan Cyber Defense. Permanently Deployed in Protective Operations."
+            },
+            bn: {
+                top: "🚨 জাতীয় সাইবার আর্থিক প্রতারণা হেল্পলাইন নম্বর: ১৯৩০ (1930)",
+                sub: "সুরক্ষিত ডিজিটাল ভারত • সুনাগরিকের সুরক্ষাকবচ",
+                sec1: "🎯 সাইবার অপরাধ ও প্রতারণার রূপরেখা",
+                b_scam: "🚨 প্রধান প্রতারণা পদ্ধতিসমূহ",
+                c_scams: `<li><strong>ব্যাংক প্রতারণা (Financial Fraud):</strong> কেওয়াইসি আপডেট বা কার্ড ব্লকের নাম করে ফেক কল ও ওটিপি চুরি।</li>
+                          <li><strong>তথ্য চুরি (Data Theft/Phishing):</strong> লটারি বা রিচার্জের টোপ দিয়ে ভুয়া লিংকের মাধ্যমে পাসওয়ার্ড হাতিয়ে নেওয়া।</li>
+                          <li><strong>সাইবার ব্ল্যাকমেইলিং (Cyber Blackmail):</strong> সোশ্যাল মিডিয়া হ্যাক করে বা ফেক ভিডিও চ্যাটের মাধ্যমে অর্থ দাবি।</li>
+                          <li><strong>ক্ষতিকারক ম্যালওয়্যার (Malware):</strong> ফোনে গোপনে ম্যালওয়্যার ঢুকিয়ে ডেটা ও পাসওয়ার্ড চুরি করা।</li>`,
+                sec2: "🌐 ওয়েবসাইট ও ভিউ কল যাচাইকরণ",
+                c_verify: `<li><strong>🔒 HTTP বনাম HTTPS যাচাই:</strong> সুরক্ষিত সাইটের শুরুতে সর্বদা HTTPS এবং একটি বন্ধ তালা আইকন (🔒) থাকে। \"Not Secure\" লেখা সাইটে নিজের গোপন তথ্য দেওয়া সম্পূর্ণ নিষিদ্ধ।</li>
+                           <li><strong>📱 থার্ড-পার্টি অ্যাপের ফাঁদ:</strong> গুগল প্লে স্টোরের বাইরে থেকে ডাউনলোড করা যেকোনো .apk ফাইল হলো থার্ড-পার্টি অ্যাপ। প্রতারকদের কথায় AnyDesk বা TeamViewer এর মতো স্ক্রিন শেয়ারিং অ্যাপ ইনস্টল করলে ফোনের সম্পূর্ণ নিয়ন্ত্রণ অন্যের হাতে চলে যায়।</li>`,
+                sec3: "⚖️ সাইবার এফআইআর (FIR) দায়ের করার নিয়ম",
+                c_fir: `<li><strong>ভয় পাওয়ার কিছু নেই:</strong> সাইবার অপরাধ বা অনলাইন প্রতারণার শিকার হলে আইনি ব্যবস্থা নেওয়া আপনার অধিকার। আইন অনুযায়ী police আপনার পরিচয় সম্পূর্ণ গোপন রাখতে বাধ্য।</li>
+                        <li><strong>প্রয়োজনীয় নথি (Documents Needed):</strong> ব্যাংক স্টেটমেন্ট, প্রতারণা হওয়া মেসেজের স্ক্রিনশট, ট্রানজেকশন আইডি এবং প্রতারকের ফোন নম্বর বা ইমেইল আইডি।</li>
+                        <li><strong>গোল্ডেন আওয়ার (Golden Hour):</strong> আর্থিক প্রতারণার প্রথম ২ ঘণ্টার মধ্যে সরাসরি <span class="highlight">১৯৩০</span> হেল্পলাইনে কল করলে টাকা অন্য অ্যাকাউন্টে ফ্রিজ করা সম্ভব হয়।</li>`,
+                sec4: "🚨 তাত্ক্ষণিক অ্যাকশন পোর্টাল",
+                c_action: "অনলাইনে অভিযোগ দায়ের করার জন্য ভারত সরকারের একমাত্র অফিশিয়াল এবং নিরাপদ সাইবার পোর্টালে সরাসরি ভিজিট করুন।",
+                btn_link: "জাতীয় সাইবার ক্রাইম পোর্টালে অভিযোগ করুন ↗",
+                sec5: "📱 সাইবার সিকিউরিটি লাইভ অডিট (৩টি বিশেষ সেকশন)",
+                cat_dev: "📱 ডিভাইস ও অনলাইন",
+                cat_wom: "🚺 নারী নিরাপত্তা",
+                cat_chi: "👶 শিশু সুরক্ষা",
+                qdone: "🎉 অডিট সম্পন্ন হয়েছে!",
+                score_text: "আপনার অডিট স্কোর: ",
+                retry: "আবার পরীক্ষা করুন",
+                q_label: "প্রশ্ন: ",
+                s_label: "স্কোর: ",
+                prev: "আগের প্রশ্ন",
+                next: "পরের প্রশ্ন",
+                result: "ফলাফল",
+                foot: "© 2026 উড়ান সাইবার ডিফেন্স। দেশের সুরক্ষায় আমরা সদা প্রস্তুত।"
+            },
+            hi: {
+                top: "🚨 राष्ट्रीय साइबर वित्तीय धोखाधड़ी हेल्पलाइन नंबर: 1930",
+                sub: "सुरक्षित डिजिटल भारत • अच्छे नागरिक का सुरक्षा कवच",
+                sec1: "🎯 साइबर अपराध और धोखाधड़ी की रूपरेखा",
+                b_scam: "🚨 प्रमुख धोखाधड़ी के तरीके",
+                c_scams: `<li><strong>बैंकिंग धोखाधड़ी:</strong> केवाईसी अपडेट या कार्ड ब्लॉक के नाम पर फर्जी कॉल और ओटीपी चोरी।</li>
+                          <li><strong>डेटा चोरी:</strong> लॉटरी या मुफ्त रिचार्ज का लालच देकर नकली लिंक के जरिए पासवर्ड चुराना।</li>
+                          <li><strong>साइबर ब्लैकमेलिंग:</strong> सोशल मीडिया हैक करके या फर्जी वीडियो चैट के जरिए पैसों की मांग।</li>
+                          <li><strong>खतरनाक मैलवेयर:</strong> फोन में चुपके से मैलवेयर डालकर डेटा और पासवर्ड चोरी करना।</li>`,
+                sec2: "🌐 वेबसाइट और फर्जी कॉल वेरिफिकेशन",
+                c_verify: `<li><strong>🔒 HTTP बनाम HTTPS जांच:</strong> सुरक्षित साइट की शुरुआत में हमेशा HTTPS और एक बंद ताला आइकन (🔒) होता है। \"Not Secure\" वाली साइटों पर अपनी गोपनीय जानकारी देना पूरी तरह प्रतिबंधित है।</li>
+                           <li><strong>📱 थर्ड-पार्टी ऐप्स का जाल:</strong> गूगल प्ले स्टोर के बाहर से डाउनलोड की गई कोई भी .apk फाइल थर्ड-पार्टी ऐप है। जालसाजों के कहने पर AnyDesk या TeamViewer जैसे स्क्रीन शेयरिंग ऐप इंस्टॉल करने से आपके फोन का पूरा कंट्रोल उनके हाथ में जाना तय है।</li>`,
+                sec3: "⚖️ साइबर एफआईआर (FIR) दर्ज करने की प्रक्रिया",
+                c_fir: `<li><strong>डरने की कोई बात नहीं है:</strong> साइबर अपराध या ऑनलाइन धोखाधड़ी का शिकार होने पर कानूनी कार्रवाई करना आपका अधिकार है। कानून के मुताबिक पुलिस आपकी पहचान पूरी तरह गुप्त रखने के लिए बाध्य है।</li>
+                        <li><strong>आवश्यक दस्तावेज (Documents Needed):</strong> बैंक स्टेटमेंट, धोखाधड़ी वाले मैसेज के स्क्रीनशट, ट्रांजेक्शन आईडी और जालसाज का फोन नंबर या ईमेल आईडी।</li>
+                        <li><strong>गोल्डन ऑवर (Golden Hour):</strong> वित्तीय धोखाधड़ी के पहले 2 घंटे के भीतर सीधे <span class="highlight">1930</span> हेल्पलाइन पर कॉल करने से पैसे दूसरे अकाउंट में फ्रीज किए जा सकते हैं।</li>`,
+                sec4: "🚨 त्वरित कार्रवाई पोर्टल",
+                c_action: "ऑनलाइन शिकायत दर्ज करने के लिए भारत सरकार के एकमात्र आधिकारिक and सुरक्षित साइबर पोर्टल पर सीधे विजिट करें।",
+                btn_link: "राष्ट्रीय साइबर अपराध पोर्टल पर शिकायत करें ↗",
+                sec5: "📱 डिवाइस सुरक्षा चेकअप (3 विशेष अनुभाग)",
+                cat_dev: "📱 डिवाइस और ऑनलाइन",
+                cat_wom: "🚺 महिला सुरक्षा",
+                cat_chi: "👶 बाल सुरक्षा",
+                qdone: "🎉 ऑडिट पूरा हुआ!",
+                score_text: "आपका ऑडिट स्कोर: ",
+                retry: "फिर से जाँच करें",
+                q_label: "प्रश्न: ",
+                s_label: "स्कोर: ",
+                prev: "पिछला प्रश्न",
+                next: "अगला प्रश्न",
+                result: "परिणाम",
+                foot: "© 2026 उड़ान साइबर डिफेंस। देश की सुरक्षा में हम सदैव तत्पर हैं।"
+            }
+        };
+
+        let currentLang = 'en';
+        let currentCategory = 'device';
+        let currentIdx = 0;
+        let scoreState = { device: [], women: [], child: [] };
+
+        function initAnswers() {
+            scoreState.device = Array(quizDatabase.device.length).fill(null);
+            scoreState.women = Array(quizDatabase.women.length).fill(null);
+            scoreState.child = Array(quizDatabase.child.length).fill(null);
+        }
+
+        function changeCategory(cat) {
+            currentCategory = cat;
+            currentIdx = 0;
+            document.getElementById('cat-device').className = 'cat-btn' + (cat==='device'?' active':'');
+            document.getElementById('cat-women').className = 'cat-btn' + (cat==='women'?' active':'');
+            document.getElementById('cat-child').className = 'cat-btn' + (cat==='child'?' active':'');
+            document.getElementById("score-board").style.display = "none";
+            document.getElementById("quiz-box").style.display = "block";
+            loadQuestion();
+        }
+
+        function switchLanguage(lang) {
+            currentLang = lang;
+            document.getElementById('btn-bn').className = 'lang-btn' + (lang==='bn'?' active':'');
+            document.getElementById('btn-en').className = 'lang-btn' + (lang==='en'?' active':'');
+            document.getElementById('btn-hi').className = 'lang-btn' + (lang==='hi'?' active':'');
+
+            document.getElementById('top-bar').innerText = translations[lang].top;
+            document.getElementById('m-sub').innerText = translations[lang].sub;
+            document.getElementById('t-sec1').innerText = translations[lang].sec1;
+            document.getElementById('b-scam').innerText = translations[lang].b_scam;
+            document.getElementById('c-scams').innerHTML = translations[lang].c_scams;
+            document.getElementById('t-sec2').innerText = translations[lang].sec2;
+            document.getElementById('c-verify').innerHTML = translations[lang].c_verify;
+            document.getElementById('t-sec3').innerText = translations[lang].sec3;
+            document.getElementById('c-fir').innerHTML = translations[lang].c_fir;
+            document.getElementById('t-sec4').innerText = translations[lang].sec4;
+            document.getElementById('c-action').innerText = translations[lang].c_action;
+            document.getElementById('btn-link').innerText = translations[lang].btn_link;
+            document.getElementById('t-sec5').innerText = translations[lang].sec5;
+            document.getElementById('t-foot').innerText = translations[lang].foot;
+            
+            const list = quizDatabase[currentCategory];
+            document.getElementById('cat-device').innerText = translations[lang].cat_dev + (currentLang==='en'?" (20 Queries)":(currentLang==='bn'?" (২০টি প্রশ্ন)":" (20 प्रश्न)"));
+            document.getElementById('cat-women').innerText = translations[lang].cat_wom + (currentLang==='en'?" (10 Queries)":(currentLang==='bn'?" (১০টি প্রশ্ন)":" (10 प्रश्न)"));
+            document.getElementById('cat-child').innerText = translations[lang].cat_chi + (currentLang==='en'?" (10 Queries)":(currentLang==='bn'?" (১০টি প্রশ্ন)":" (10 प्रश्न)"));
+            
+            document.getElementById('t-qdone').innerText = translations[lang].qdone;
+            document.getElementById('t-score-text').innerHTML = translations[lang].score_text + `<span id="final-score" class="highlight">0</span> / ${list.length}`;
+            document.getElementById('t-retry').innerText = translations[lang].retry;
+
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const list = quizDatabase[currentCategory];
+            const ansList = scoreState[currentCategory];
+            const q = list[currentIdx];
+            
+            document.getElementById('quiz-progress').innerText = translations[currentLang].q_label + ` ${currentIdx+1} / ${list.length}`;
+            
+            let liveScore = 0;
+            ansList.forEach((ans, i) => { if(ans === list[i].correct) liveScore++; });
+            document.getElementById('quiz-score-live').innerText = translations[currentLang].s_label + liveScore;
+
+            document.getElementById('question-text').innerText = q[currentLang+'_q'] || q.en_q;
+            
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+            const opts = q['options_'+currentLang] || q.options_en;
+            
+            opts.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt;
+                if(ansList[currentIdx] !== null) {
+                    if(idx === q.correct) { btn.style.borderColor = 'var(--success)'; btn.style.backgroundColor = 'rgba(46,204,113,0.1)'; }
+                    if(ansList[currentIdx] === idx && idx !== q.correct) { btn.style.borderColor = 'var(--alert)'; btn.style.backgroundColor = 'rgba(255,77,77,0.1)'; }
+                    btn.disabled = true;
+                } else {
+                    btn.onclick = () => { ansList[currentIdx] = idx; loadQuestion(); };
+                }
+                container.appendChild(btn);
+            });
+
+            const fb = document.getElementById('feedback-text');
+            if(ansList[currentIdx] !== null) {
+                fb.style.display = 'block';
+                const status = ansList[currentIdx] === q.correct;
+                fb.innerText = (status? '✔ ':'✖ ') + q[currentLang+'_explain'];
+                fb.style.color = status?'var(--success)':'var(--alert)';
+                fb.style.borderLeft = `4px solid ${status?'var(--success)':'var(--alert)'}`;
+            } else {
+                fb.style.display = 'none';
+            }
+
+            document.getElementById('prev-btn').disabled = currentIdx === 0;
+            document.getElementById('prev-btn').innerText = translations[currentLang].prev;
+            document.getElementById('next-btn').innerText = currentIdx === list.length - 1 ? translations[currentLang].result : translations[currentLang].next;
+        }
+
+        function nextQuestion() {
+            const list = quizDatabase[currentCategory];
+            if(currentIdx < list.length - 1) {
+                currentIdx++;
+                loadQuestion();
+            } else {
+                document.getElementById('quiz-box').style.display = 'none';
+                const sb = document.getElementById('score-board');
+                sb.style.display = 'block';
+                let finalScore = 0;
+                scoreState[currentCategory].forEach((ans, i) => { if(ans === list[i].correct) finalScore++; });
+                document.getElementById('final-score').innerText = `${finalScore} / ${list.length}`;
+            }
+        }
+
+        function prevQuestion() {
+            if(currentIdx > 0) { currentIdx--; loadQuestion(); }
+        }
+
+        function restartQuiz() {
+            scoreState[currentCategory] = Array(quizDatabase[currentCategory].length).fill(null);
+            currentIdx = 0;
+            document.getElementById('score-board').style.display = 'none';
+            document.getElementById('quiz-box').style.display = 'block';
+            loadQuestion();
+        }
+
+        initAnswers();
+        loadQuestion();
+    </script>
+</body>
+</html>
