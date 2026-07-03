@@ -592,5 +592,78 @@
         initAnswers();
         loadQuestion();
     </script>
+<!-- সাইবার সিকিউরিটি মাস্টারক্লাস সেকশন -->
+<h2 class="section-title">📘 Cyber Security Masterclass (40 Expert Guides)</h2>
+<div id="masterclass-container">
+    <!-- ডিভাইস নিরাপত্তা (২০টি) -->
+    <div class="card">
+        <h3 style="color:var(--accent)">📱 Device & Online Security (20 Points)</h3>
+        <script>
+            const devQs = [
+                "1. Why is OS update crucial? It patches security vulnerabilities that hackers use for zero-day exploits.",
+                "2. 2FA importance? Adds a secondary authentication layer beyond passwords.",
+                "3. Public Wi-Fi risk? Data sniffing/interception by attackers.",
+                "4. Password hygiene? Use complex, unique passwords for every account.",
+                "5. Phishing detection? Check sender domain and link legitimacy.",
+                "6. USB charging? Juice-jacking risk; use own charger.",
+                "7. Screen sharing apps? Only grant access to trusted individuals.",
+                "8. App permissions? Deny microphone/location for non-essential apps.",
+                "9. Bank alerts? Enable real-time SMS/Email notification.",
+                "10. Cloud backups? Encrypt them to prevent unauthorized access.",
+                "11. VPN usage? Masks IP and encrypts internet traffic.",
+                "12. Browser cache? Clear periodically to prevent data tracking.",
+                "13. Anti-virus? Mandatory for Windows environments.",
+                "14. Bluetooth? Disable when not in use.",
+                "15. App Store? Only download from official sources.",
+                "16. QR codes? Verify source before scanning malicious links.",
+                "17. Data encryption? Store sensitive files in encrypted vaults.",
+                "18. Email links? Hover before clicking to see the destination.",
+                "19. Device theft? Enable 'Find My Device' for remote wipe.",
+                "20. Social media? Limit profile visibility to friends only."
+            ];
+            devQs.forEach(q => document.write(`<p style="margin-bottom:10px; font-size:14px; border-bottom:1px solid #172a45;">${q}</p>`));
+        </script>
+    </div>
+
+    <!-- নারী নিরাপত্তা (১০টি) -->
+    <div class="card">
+        <h3 style="color:var(--accent)">🚺 Women Digital Safety (10 Points)</h3>
+        <script>
+            const womQs = [
+                "1. Morphed photos? Preserve evidence, do not delete, report immediately.",
+                "2. Cyberstalking? Ignore/block, then file police complaint.",
+                "3. Extortion? Never pay; evidence preservation is key.",
+                "4. Fake profiles? Report to platform and local cyber cell.",
+                "5. Harassment? Use '1930' helpline without fear.",
+                "6. Video privacy? Cover cams when not in use.",
+                "7. Personal info? Avoid posting real-time location.",
+                "8. Digital consent? Never share private media with acquaintances.",
+                "9. Law support? IT Act provides absolute identity protection.",
+                "10. Safety culture? Spread awareness, never stay silent."
+            ];
+            womQs.forEach(q => document.write(`<p style="margin-bottom:10px; font-size:14px; border-bottom:1px solid #172a45;">${q}</p>`));
+        </script>
+    </div>
+
+    <!-- শিশু নিরাপত্তা (১০টি) -->
+    <div class="card">
+        <h3 style="color:var(--accent)">👶 Child Safety (10 Points)</h3>
+        <script>
+            const childQs = [
+                "1. Parental control? Activate Google Family Link.",
+                "2. Online gaming? Monitor chat and stranger interaction.",
+                "3. Secret sharing? Educate kids to inform parents immediately.",
+                "4. Harmful content? Use 'SafeSearch' on all browsers.",
+                "5. Grooming sign? Watch for mood swings or device hiding.",
+                "6. Social media? Prohibit under-age accounts.",
+                "7. Card info? Never save bank details on gaming apps.",
+                "8. Communication? Keep dialogue friendly and open.",
+                "9. Screen habits? Establish time limits with mutual consent.",
+                "10. Emergency? Teach them to approach parents first."
+            ];
+            childQs.forEach(q => document.write(`<p style="margin-bottom:10px; font-size:14px; border-bottom:1px solid #172a45;">${q}</p>`));
+        </script>
+    </div>
+</div>
 </body>
 </html>
